@@ -10,20 +10,19 @@ import SwiftUI
 
 extension DonutShape {
 	var animatableData: CGFloat {
-		get { innerRadiusRatio }
-		set { innerRadiusRatio = newValue }
+		get { lineWidth }
+		set { lineWidth = newValue }
 	}
 }
 
 struct DonutShape: Shape {
-	var innerRadiusRatio: CGFloat
+	var lineWidth: CGFloat
 	
-	init(innerRadiusRatio: CGFloat) {
-		self.innerRadiusRatio = innerRadiusRatio
+	init(lineWidth: CGFloat) {
+		self.lineWidth = lineWidth
 	}
 	
 	func path(in rect: CGRect) -> Path {
-		guard innerRadiusRatio >= 0.0 && innerRadiusRatio <= 1.0 else { return Path() }
 		let w = rect.width
 		let h = rect.height
 		
@@ -32,16 +31,16 @@ struct DonutShape: Shape {
 		var path = Path()
 		path.addArc(
 			center: center,
-			radius: radius,
-			startAngle: Angle(degrees: 0),
-			endAngle: Angle(degrees: 360.0),
+			radius: radius + lineWidth / 2,
+			startAngle: Angle(degrees: -90),
+			endAngle: Angle(degrees: 270.0),
 			clockwise: true
 		)
 		path.addArc(
 			center: center,
-			radius: radius * innerRadiusRatio,
-			startAngle: Angle(degrees: 0),
-			endAngle: Angle(degrees: 360.0),
+			radius: radius - lineWidth / 2,
+			startAngle: Angle(degrees: -90),
+			endAngle: Angle(degrees: 270.0),
 			clockwise: true
 		)
 		return path
@@ -53,7 +52,7 @@ struct DonutShape: Shape {
 #Preview {
 	
 	VStack {
-		DonutShape(innerRadiusRatio: 0.2)
+		DonutShape(lineWidth: 50)
 			.fill(Color.green, style: FillStyle(eoFill: true))
 			.frame(width: 100, height: 100)
 	}
