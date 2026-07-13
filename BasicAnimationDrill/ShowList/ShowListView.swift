@@ -19,11 +19,13 @@ struct Item: Identifiable {
 	let cardShape: CardShape
 	let description: String
 	let backgroundColor: Color
+	
 }
 
 struct ShowListView: View {
 	
 	@State private var isCardVisible: Bool = false
+	
 	let items: [Item] = [
 		Item(cardShape: .roundedRect, description: "둥근직사각형", backgroundColor: .gray.opacity(0.3)),
 		Item(cardShape: .capsule, description: "캡슐", backgroundColor: .orange.opacity(0.3)),
@@ -34,25 +36,23 @@ struct ShowListView: View {
 	
     var body: some View {
 		VStack {
+			ForEach(items.enumerated(), id: \.offset) { index, item in
+				CardView(item: item)
+					.offset(x: 0, y: isCardVisible ? 0 : 300)
+					.opacity(isCardVisible ? 1 : 0)
+					.animation(.easeInOut(duration: 1).delay((Double(index) * 0.15)), value: isCardVisible)
+			}
 			
-			ForEach(items, id: \.id) { item in
-				CardView(item: item) {
-					ShapeView(item: item, content: AnyShape())
-				}
+			Button("목록 표시") {
+				isCardVisible.toggle()
 			}
 		}
     }
 }
 
-struct CardView<Content: View>: View {
+struct CardView: View {
 	
-	var item: Item
-	var content: Content
-	
-	init(item: Item, @ViewBuilder content: () -> Content) {
-		self.item = item
-		self.content = content()
-	}
+	let item: Item
 	
 	var body: some View {
 		VStack(alignment: .center, spacing: 30) {
