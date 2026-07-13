@@ -33,7 +33,14 @@ struct ShowListView: View {
 	]
 	
     var body: some View {
-        
+		VStack {
+			
+			ForEach(items, id: \.id) { item in
+				CardView(item: item) {
+					ShapeView(item: item, content: AnyShape())
+				}
+			}
+		}
     }
 }
 
@@ -48,12 +55,68 @@ struct CardView<Content: View>: View {
 	}
 	
 	var body: some View {
-		ZStack {
-//			switch item.cardShape {
-//			case .roundedRect:
-//				RoundedRectangle(cornerRadius: 10)
-//			}
+		VStack(alignment: .center, spacing: 30) {
+			switch item.cardShape {
+			case .roundedRect:
+				ShapeView(
+					item: item,
+					content: AnyShape(RoundedRectangle(cornerRadius: 10))
+				)
+			case .rect:
+				ShapeView(
+					item: item,
+					content: AnyShape(Rectangle())
+				)
+			case .capsule:
+				ShapeView(
+					item: item,
+					content: AnyShape(Capsule())
+				)
+			case .circle:
+				ShapeView(
+					item: item,
+					content: AnyShape(Circle())
+				)
+			}
 		}
+	}
+}
+
+struct ShapeView: View {
+	
+	let item: Item
+	let content: AnyShape
+	
+	init( item: Item, content: AnyShape) {
+		self.item = item
+		self.content = content
+	}
+	
+	var body: some View {
+		content
+			.stroke(item.backgroundColor, lineWidth: 2)
+			.fill(item.backgroundColor)
+			.frame(maxWidth: .infinity)
+			.frame(height: 70)
+			.overlay(alignment: .center) {
+				Text(item.description)
+					.font(.title)
+					.fontWeight(.semibold)
+			}
+			.padding()
+		
+	}
+}
+
+struct AnyShape: Shape {
+	let content: any Shape
+	
+	init(_ shape: any Shape) {
+		self.content = shape
+	}
+	
+	func path(in rect: CGRect) -> Path {
+		content.path(in: rect)
 	}
 }
 
