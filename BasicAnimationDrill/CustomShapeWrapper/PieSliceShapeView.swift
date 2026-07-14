@@ -8,14 +8,33 @@
 import SwiftUI
 
 struct PieSliceShapeView: View {
+	
+	@State private var hasActivated: Bool = false
+	
     var body: some View {
-		PieSliceShape(progress: 0.6)
+		VStack(spacing: 50) {
+			PieSliceShape(progress: hasActivated ? 1 : 0)
+				.fill(Color.blue)
+				.frame(width: 200, height: 200)
+				.animation(.easeInOut(duration: 1), value: hasActivated)
+			
+			
+			Button(hasActivated ? "원을 지워라" : "원을 만들어라!") {
+				hasActivated.toggle()
+			}
+			.font(.title)
+		}
     }
 }
 
 struct PieSliceShape: Shape {
 	
-	let progress: CGFloat
+	var progress: CGFloat
+	
+	var animatableData: CGFloat {
+		get { progress }
+		set { progress = newValue }
+	}
 	
 	func path(in rect: CGRect) -> Path {
 		let centerX: CGFloat = rect.width / 2
@@ -29,16 +48,15 @@ struct PieSliceShape: Shape {
 		path.addArc(
 			center: center,
 			radius: radius,
-			startAngle: Angle(degrees: startRadian),
+			startAngle: Angle(radians: startRadian),
 			endAngle: Angle(radians: radian),
-			clockwise: true
+			clockwise: false
 		)
 		path.closeSubpath()
 		return path
 	}
-	
-	
 }
+
 
 #Preview {
     PieSliceShapeView()
