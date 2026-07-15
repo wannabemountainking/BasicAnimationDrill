@@ -18,11 +18,14 @@ struct LinearProgressBarView: View {
 				.frame(height: 20)
 				.frame(maxWidth: .infinity)
 				.overlay(alignment: .leading) {
-					Ge
 					RoundedRectangle(cornerRadius: 8)
-						.fill(.accent)
+                        .fill(Color.accentColor)
+                        .frame(width: <#T##CGFloat?#>)
 						
 				}
+                .background(
+                    Geometr
+                )
 		}
     }
 }
