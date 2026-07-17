@@ -22,25 +22,25 @@ struct LinearProgressBarView: View {
 	
     var body: some View {
 		VStack(alignment: .center, spacing: 40) {
-				RoundedRectangle(cornerRadius: 8)
-					.fill(Color.gray.opacity(0.2))
-					.frame(height: 20)
-					.frame(maxWidth: .infinity)
-					.overlay(alignment: .leading) {
-						RoundedRectangle(cornerRadius: 8)
-							.fill(Color.accentColor)
-							.frame(width: barWidth * progress)
-							.animation(.easeInOut(duration: 0.6), value: progress)
-					}
-					.background(
-						GeometryReader(content: { geo in
-							Color.clear.preference(key: WidthKey.self, value: geo.size.width)
-						}) //:GEOMETRY
-					)
-					.onPreferenceChange(WidthKey.self) { newWidth in
-						barWidth = newWidth
-					}
-					.padding()
+			RoundedRectangle(cornerRadius: 8)
+				.fill(Color.gray.opacity(0.2))
+				.frame(height: 20)
+				.frame(maxWidth: .infinity)
+				.overlay(alignment: .leading) {
+					RoundedRectangle(cornerRadius: 8)
+						.fill(Color.accentColor)
+						.frame(width: barWidth * progress)
+						.animation(.easeInOut(duration: 0.6), value: progress)
+				}
+				.background(
+					GeometryReader(content: { geo in
+						Color.clear.preference(key: WidthKey.self, value: geo.size.width)
+					}) //:GEOMETRY
+				)
+				.onPreferenceChange(WidthKey.self) { newWidth in
+					barWidth = newWidth
+				}
+				.padding()
 			
 			Text("\(Int((progress * 100).rounded()))%")
 			

@@ -33,6 +33,7 @@ struct SingleDelayLoading: View {
 		}
 		
     }
+	
 }
 
 #Preview {
